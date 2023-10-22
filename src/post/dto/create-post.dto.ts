@@ -9,4 +9,7 @@ export class CreatePostDto {
     
     @ApiProperty({ required: false, default: false })
     publish?: boolean = false
+    
+    @ApiProperty({ required: false, default: false })
+    autherID?: number
 }

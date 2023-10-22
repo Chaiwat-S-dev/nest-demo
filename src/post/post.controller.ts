@@ -10,26 +10,26 @@ export class PostController {
 
   @Post()
   async create(@Body() createPostDto: CreatePostDto): Promise<PostModel> {
-    return this.postService.create(createPostDto);
+    return this.postService.createPost(createPostDto);
   }
 
   @Get()
   async findAll(): Promise<PostModel[]> {
-    return this.postService.findAll({});
+    return this.postService.getPosts();
   }
 
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<PostModel> {
-    return this.postService.findOne({id: +id});
+    return this.postService.getPost(+id);
   }
 
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto): Promise<PostModel> {
-    return this.postService.update({where: {id: +id}, data: updatePostDto});
+    return this.postService.updatePost(+id, updatePostDto);
   }
 
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<PostModel> {
-    return this.postService.remove({id: +id});
+    return this.postService.deletePost(+id);
   }
 }

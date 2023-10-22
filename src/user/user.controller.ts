@@ -2,34 +2,34 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User as UserModel, Post as PostModel, Prisma } from '@prisma/client';
+import { User as UserModel } from '@prisma/client';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  async create(@Body() createUserDto: Prisma.UserCreateInput): Promise<UserModel> {
-    return this.userService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto): Promise<UserModel> {
+    return this.userService.createUser(createUserDto);
   }
 
   @Get()
   async findAll(): Promise<UserModel[]> {
-    return this.userService.findAll({});
+    return this.userService.getUsers();
   }
 
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<UserModel> {
-    return this.userService.findOne({id: Number(id)});
+    return this.userService.getUser(+id);
   }
 
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto): Promise<UserModel> {
-    return this.userService.update({where: {id: Number(id)}, data: updateUserDto});
+    return this.userService.updateUser(+id, updateUserDto);
   }
 
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<UserModel> {
-    return this.userService.remove({id: Number(id)});
+    return this.userService.deleteUser(+id)
   }
 }

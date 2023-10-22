@@ -1,56 +1,34 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service';
-import { Post, Prisma } from '@prisma/client';
+import { CreatePostDto } from './dto/create-post.dto';
+import { UpdatePostDto } from './dto/update-post.dto'
+import { PostRepository } from './repository/post.repository';
 
 @Injectable()
 export class PostService {
-  constructor(private prisma: PrismaService) {}
-
-  async findOne(
-    postWhereUniqueInput: Prisma.PostWhereUniqueInput,
-  ): Promise<Post | null> {
-    return this.prisma.post.findUnique({
-      where: postWhereUniqueInput,
-    });
+  constructor(private repository: PostRepository) {}
+  
+  async createPost(data: CreatePostDto) {
+    const post = await this.repository.create(data);
+    return post
   }
 
-  async findAll(params: {
-    skip?: number;
-    take?: number;
-    cursor?: Prisma.PostWhereUniqueInput;
-    where?: Prisma.PostWhereInput;
-    orderBy?: Prisma.PostOrderByWithRelationInput;
-  }): Promise<Post[]> {
-    const { skip, take, cursor, where, orderBy } = params;
-    return this.prisma.post.findMany({
-      skip,
-      take,
-      cursor,
-      where,
-      orderBy,
-    });
+  async getPost(id: number) {
+    const post = await this.repository.findOne({ id });
+    return post;
   }
 
-  async create(data: Prisma.PostCreateInput): Promise<Post> {
-    return this.prisma.post.create({
-      data,
-    });
+  async getPosts() {
+    const posts = await this.repository.findAll({});
+    return posts;
   }
 
-  async update(params: {
-    where: Prisma.PostWhereUniqueInput;
-    data: Prisma.PostUpdateInput;
-  }): Promise<Post> {
-    const { data, where } = params;
-    return this.prisma.post.update({
-      data,
-      where,
-    });
+  async updatePost(id: number, data: UpdatePostDto) {
+    const post = await this.repository.update({ where: { id: +id }, data });
+    return post;
   }
 
-  async remove(where: Prisma.PostWhereUniqueInput): Promise<Post> {
-    return this.prisma.post.delete({
-      where,
-    });
+  async deletePost(id: number) {
+    const post = await this.repository.remove({ id });
+    return post;
   }
 }

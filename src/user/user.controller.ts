@@ -1,8 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { User as UserModel } from '@prisma/client';
+import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common'
+import { UserService } from './user.service'
+import { CreateUserDto } from './dto/create-user.dto'
+import { UpdateUserDto } from './dto/update-user.dto'
+import { User as UserModel } from '@prisma/client'
 
 @Controller('user')
 export class UserController {
@@ -10,22 +10,22 @@ export class UserController {
 
   @Post()
   async create(@Body() createUserDto: CreateUserDto): Promise<UserModel> {
-    return this.userService.createUser(createUserDto);
+    return this.userService.createUser(createUserDto)
   }
 
   @Get()
   async findAll(): Promise<UserModel[]> {
-    return this.userService.getUsers();
+    return this.userService.getUsers()
   }
 
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<UserModel> {
-    return this.userService.getUser(+id);
+    return this.userService.getUser(+id)
   }
 
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto): Promise<UserModel> {
-    return this.userService.updateUser(+id, updateUserDto);
+    return this.userService.updateUser(+id, updateUserDto)
   }
 
   @Delete(':id')

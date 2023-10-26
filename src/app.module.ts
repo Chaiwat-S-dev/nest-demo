@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common'
+import { Module, MiddlewareConsumer } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { CacheModule } from '@nestjs/cache-manager'
 import { AppController } from './app.controller'
@@ -7,6 +7,7 @@ import { UserModule } from './user/user.module'
 import { PostModule } from './post/post.module'
 import config from 'config/configuration'
 import * as redisStore from 'cache-manager-redis-store'
+import { RequestLoggerMiddleware } from './logging/requestLog.middleware'
 
 @Module({
   imports: [
@@ -26,4 +27,9 @@ import * as redisStore from 'cache-manager-redis-store'
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(RequestLoggerMiddleware).forRoutes('*');
+  }
+}

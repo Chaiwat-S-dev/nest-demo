@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common'
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common'
 import { PostService } from './post.service'
 import { CreatePostDto } from './dto/create-post.dto'
 import { UpdatePostDto } from './dto/update-post.dto'
@@ -19,17 +19,17 @@ export class PostController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<PostModel> {
-    return this.postService.getPost(+id)
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<PostModel> {
+    return this.postService.getPost(id)
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto): Promise<PostModel> {
-    return this.postService.updatePost(+id, updatePostDto)
+  async update(@Param('id', ParseIntPipe) id: number, @Body() updatePostDto: UpdatePostDto): Promise<PostModel> {
+    return this.postService.updatePost(id, updatePostDto)
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string): Promise<PostModel> {
-    return this.postService.deletePost(+id)
+  async remove(@Param('id', ParseIntPipe) id: number): Promise<PostModel> {
+    return this.postService.deletePost(id)
   }
 }
